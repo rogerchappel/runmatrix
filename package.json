@@ -18,7 +18,8 @@
     "dist",
     "README.md",
     "docs",
-    "SECURITY.md"
+    "SECURITY.md",
+    "LICENSE"
   ],
   "scripts": {
     "build": "tsc -p tsconfig.json",
@@ -35,7 +36,7 @@
     "receipts",
     "local-first"
   ],
-  "author": "Roger",
+  "author": "Roger Chappel",
   "license": "MIT",
   "dependencies": {
     "yaml": "^2.8.1"
@@ -46,5 +47,13 @@
   },
   "engines": {
     "node": ">=20"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rogerchappel/runmatrix.git"
+  },
+  "bugs": {
+    "url": "https://github.com/rogerchappel/runmatrix/issues"
+  },
+  "homepage": "https://github.com/rogerchappel/runmatrix#readme"
 }
