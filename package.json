@@ -26,7 +26,8 @@
     "check": "tsc -p tsconfig.json --noEmit",
     "test": "npm run build && node --test test/*.test.js",
     "smoke": "bash scripts/smoke.sh",
-    "package:smoke": "npm pack --dry-run",
+    "prepack": "npm run build",
+    "package:smoke": "npm run build && test -f dist/cli.js && test -f dist/index.js && npm pack --dry-run",
     "release:check": "npm test && npm run package:smoke"
   },
   "keywords": [

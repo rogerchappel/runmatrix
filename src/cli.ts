@@ -16,7 +16,7 @@ async function main(argv: string[]): Promise<number> {
 
   if (args.help || !args.command) {
     process.stdout.write(helpText());
-    return args.command ? 0 : 1;
+    return args.help ? 0 : 1;
   }
 
   if (args.command === "plan") {
