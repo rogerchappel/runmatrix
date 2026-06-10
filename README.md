@@ -30,7 +30,9 @@ Run the maintained smoke fixture to exercise the main workflow end to end:
 npm run smoke
 ```
 
-The smoke command currently expands to:
+The smoke command plans a tiny fixture matrix, executes it with `--execute`,
+checks the latest receipt, and removes the generated `.runmatrix-smoke`
+directory before it exits. It currently expands to:
 
 ```sh
 bash scripts/smoke.sh
