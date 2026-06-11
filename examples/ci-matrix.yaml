@@ -1,0 +1,9 @@
+version: 1
+name: docs-ci-demo
+outDir: ../.runmatrix-demo
+axes:
+  node: [20, 22]
+commands:
+  - name: check-node-{{node}}
+    run: node -e "const major = Number(process.versions.node.split('.')[0]); if (major < {{node}}) process.exit(1); console.log('node=' + major + ' target={{node}}')"
+    continueOnFailure: true

@@ -37,6 +37,10 @@ directory before it exits. It currently expands to:
 ```sh
 bash scripts/smoke.sh
 ```
+## Demo Recipes
+
+- [Local CI matrix demo](docs/tutorials/local-ci-matrix.md) shows how to preview
+  and execute `examples/ci-matrix.yaml`, then inspect the generated receipt.
 ## Verification
 
 ```sh
