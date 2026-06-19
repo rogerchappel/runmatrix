@@ -57,6 +57,10 @@ npm run release:check
 - Output schemas and CLI flags may change before a stable 1.0 release.
 - Review generated files before committing them, especially when they summarize logs, diffs, or dependency metadata.
 
+## Release readiness
+
+Use [docs/release-readiness.md](docs/release-readiness.md) before opening release PRs or tagging a release.
+
 ## Contributing
 
 See [CONTRIBUTING.md](CONTRIBUTING.md). Keep changes small, include a fixture or smoke case when behavior changes, and paste verification output into the pull request.
