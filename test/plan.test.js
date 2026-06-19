@@ -1,8 +1,11 @@
 import assert from "node:assert/strict";
 import { execFile } from "node:child_process";
+import { mkdtemp, readFile, writeFile } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 import { test } from "node:test";
 import { promisify } from "node:util";
-import { expandJobs, formatPlan } from "../dist/index.js";
+import { expandJobs, formatPlan, runMatrix } from "../dist/index.js";
 
 const execFileAsync = promisify(execFile);
 
@@ -57,4 +60,50 @@ test("cli help advertises safe preview before execution", async () => {
   assert.match(stdout, /runmatrix plan/);
   assert.match(stdout, /runmatrix run --execute/);
   assert.match(stdout, /Expand jobs without executing commands/);
+});
+
+test("runMatrix stops after a failed job unless continueOnFailure is set", async () => {
+  const dir = await mkdtemp(join(tmpdir(), "runmatrix-stop-"));
+  const configPath = join(dir, "runmatrix.yaml");
+  const outDir = join(dir, "receipts");
+
+  await writeFile(configPath, `name: stop-on-failure
+commands:
+  - name: fail-first
+    run: node -e "process.exit(7)"
+  - name: would-run-next
+    run: node -e "console.log('unexpected')"
+`, "utf8");
+
+  const receipt = await runMatrix({ configPath, outDir, execute: true });
+
+  assert.equal(receipt.totals.planned, 2);
+  assert.equal(receipt.totals.failed, 1);
+  assert.equal(receipt.totals.skipped, 1);
+  assert.equal(receipt.jobs[0].status, "failed");
+  assert.equal(receipt.jobs[0].exitCode, 7);
+  assert.equal(receipt.jobs[1].status, "skipped");
+});
+
+test("runMatrix redacts secret-like environment keys in receipts", async () => {
+  const dir = await mkdtemp(join(tmpdir(), "runmatrix-redact-"));
+  const configPath = join(dir, "runmatrix.yaml");
+  const outDir = join(dir, "receipts");
+
+  await writeFile(configPath, `name: redact-env
+env:
+  PUBLIC_VALUE: visible
+  API_TOKEN: should-not-ship
+commands:
+  - name: print-public
+    run: node -e "console.log(process.env.PUBLIC_VALUE)"
+`, "utf8");
+
+  const receipt = await runMatrix({ configPath, outDir, execute: true });
+  const latest = JSON.parse(await readFile(join(outDir, "latest.json"), "utf8"));
+
+  assert.equal(receipt.jobs[0].env.PUBLIC_VALUE, "visible");
+  assert.equal(receipt.jobs[0].env.API_TOKEN, "[REDACTED]");
+  assert.equal(latest.jobs[0].env.API_TOKEN, "[REDACTED]");
+  assert.equal(latest.jobs[0].stdout.trim(), "visible");
 });

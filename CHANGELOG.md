@@ -9,6 +9,7 @@ format and uses semantic versioning when versioned releases are published.
 
 ### Added
 
+- Added fixture-backed release tests for stop-on-failure receipts and secret-like environment key redaction.
 - Added a release-readiness checklist for local verification and package review.
 
 - Initial project setup.
