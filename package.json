@@ -32,7 +32,8 @@
     "smoke": "bash scripts/smoke.sh",
     "prepack": "npm run build",
     "package:smoke": "npm run build && test -f dist/cli.js && test -f dist/index.js && npm pack --dry-run",
-    "release:check": "npm test && npm run check && npm run smoke && npm run package:smoke"
+    "release:check": "npm test && npm run check && npm run smoke && npm run package:smoke",
+    "release:readiness": "node scripts/validate-release-readiness.mjs"
   },
   "keywords": [
     "cli",
