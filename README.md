@@ -47,6 +47,7 @@ bash scripts/smoke.sh
 npm run check
 npm test
 npm run smoke
+npm run release:readiness
 npm run package:smoke
 npm run release:check
 ```
