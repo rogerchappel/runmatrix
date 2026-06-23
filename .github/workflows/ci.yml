@@ -64,4 +64,5 @@ jobs:
             npm install
           fi
 
+          npm run release:readiness
           npm run release:check
