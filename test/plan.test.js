@@ -62,6 +62,48 @@ test("cli help advertises safe preview before execution", async () => {
   assert.match(stdout, /Expand jobs without executing commands/);
 });
 
+test("cli refuses to run commands without --execute", async () => {
+  const dir = await mkdtemp(join(tmpdir(), "runmatrix-cli-refuse-"));
+  const configPath = join(dir, "runmatrix.yaml");
+
+  await writeFile(configPath, `name: refuse-run
+commands:
+  - name: would-run
+    run: node -e "console.log('unexpected')"
+`, "utf8");
+
+  await assert.rejects(
+    execFileAsync("node", ["dist/cli.js", "run", "--config", configPath]),
+    (error) => {
+      assert.equal(error.code, 2);
+      assert.match(error.stderr, /Refusing to run without --execute/);
+      assert.equal(error.stdout, "");
+      return true;
+    }
+  );
+});
+
+test("cli plan --json emits machine-readable jobs", async () => {
+  const dir = await mkdtemp(join(tmpdir(), "runmatrix-cli-json-"));
+  const configPath = join(dir, "runmatrix.yaml");
+
+  await writeFile(configPath, `name: json-plan
+axes:
+  node: [20]
+commands:
+  - name: check-node-{{node}}
+    run: node --version
+`, "utf8");
+
+  const { stdout } = await execFileAsync("node", ["dist/cli.js", "plan", "--config", configPath, "--json"]);
+  const parsed = JSON.parse(stdout);
+
+  assert.equal(parsed.jobs.length, 1);
+  assert.equal(parsed.jobs[0].id, "node-20__check-node-20");
+  assert.equal(parsed.jobs[0].matrix.node, 20);
+  assert.equal(parsed.jobs[0].command, "node --version");
+});
+
 test("runMatrix stops after a failed job unless continueOnFailure is set", async () => {
   const dir = await mkdtemp(join(tmpdir(), "runmatrix-stop-"));
   const configPath = join(dir, "runmatrix.yaml");
