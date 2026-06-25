@@ -39,3 +39,16 @@ Commit the YAML when it is useful as a shared smoke matrix. Do not commit the
 generated `.runmatrix-demo/` receipts unless a reviewer explicitly asks for
 that local evidence.
 
+## Try a release gate matrix
+
+`examples/release-gate.yaml` demonstrates a release-check shape that expands
+two rows and keeps running every row with `continueOnFailure: true`.
+
+```sh
+node dist/cli.js plan --config examples/release-gate.yaml --json
+node dist/cli.js run --execute --config examples/release-gate.yaml
+node dist/cli.js show --out-dir .runmatrix-release-gate
+```
+
+Remove `.runmatrix-release-gate/` after local review unless you intentionally
+need to share the receipt files.

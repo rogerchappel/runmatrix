@@ -1,0 +1,11 @@
+version: 1
+name: release-gate-demo
+outDir: ../.runmatrix-release-gate
+continueOnFailure: true
+axes:
+  check:
+    - test
+    - pack
+commands:
+  - name: release-{{check}}
+    run: node -e "console.log('release check={{check}}')"

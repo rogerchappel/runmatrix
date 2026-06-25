@@ -31,8 +31,8 @@ npm run smoke
 ```
 
 The smoke command plans a tiny fixture matrix, executes it with `--execute`,
-checks the latest receipt, and removes the generated `.runmatrix-smoke`
-directory before it exits. It currently expands to:
+checks the latest receipts, and removes generated `.runmatrix-*` directories
+before it exits. It currently expands to:
 
 ```sh
 bash scripts/smoke.sh
@@ -41,6 +41,8 @@ bash scripts/smoke.sh
 
 - [Local CI matrix demo](docs/tutorials/local-ci-matrix.md) shows how to preview
   and execute `examples/ci-matrix.yaml`, then inspect the generated receipt.
+- `examples/release-gate.yaml` shows a two-row release gate matrix that keeps
+  running all checks while preserving per-row receipts.
 ## Verification
 
 ```sh
