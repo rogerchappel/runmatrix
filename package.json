@@ -16,6 +16,9 @@
   },
   "files": [
     "dist",
+    "demo",
+    "examples",
+    "fixtures",
     "README.md",
     "docs",
     "SECURITY.md"
