@@ -1,0 +1,16 @@
+version: 1
+name: ci-receipt-demo
+outDir: .runmatrix-demo
+axes:
+  package:
+    - core
+    - cli
+  node:
+    - "20"
+    - "22"
+env:
+  RUNMATRIX_NODE: "{{node}}"
+commands:
+  - name: verify-{{package}}-node-{{node}}
+    run: node ../fixtures/echo-check.mjs {{package}} {{node}}
+    timeoutMs: 10000

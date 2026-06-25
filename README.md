@@ -1,8 +1,13 @@
 # runmatrix
-Local-first TypeScript CLI for expanding command matrices and writing verification receipts.
+
+`runmatrix` is a local-first TypeScript CLI for expanding command matrices and writing deterministic verification receipts.
+
+It is useful when a PR, release note, or agent handoff needs proof that the same command ran across a small set of variants. The CLI can preview the matrix without executing anything, then writes a JSON receipt when execution is explicitly enabled.
+
 ## Status
 
 This is a v0.1.0 local-first developer tool. Treat the CLI and output formats as early-stage, pin versions in automation, and run the verification commands below before relying on it in CI.
+
 ## What it helps with
 
 - Work with cli, matrix, verification, receipts, local-first workflows from a local checkout.
@@ -17,13 +22,53 @@ cd runmatrix
 npm install
 npm run build
 ```
+
 ## CLI quickstart
+
+```sh
+node dist/cli.js plan --config examples/ci-receipt.runmatrix.yaml
+node dist/cli.js run --execute --config examples/ci-receipt.runmatrix.yaml
+node dist/cli.js show
+```
+
+`runmatrix run` refuses to execute commands unless `--execute` is present.
 
 Start with the built CLI help so the examples match the checked-out version:
 
 ```sh
 node dist/cli.js --help
 ```
+
+## Demo recipe
+
+Run the checked-in fixture demo to expand a four-job matrix, execute local fixture commands, and verify the latest receipt:
+
+```sh
+npm install
+npm run build
+bash demo/run-fixture-matrix.sh
+```
+
+The demo uses [`examples/ci-receipt.runmatrix.yaml`](examples/ci-receipt.runmatrix.yaml) and writes a temporary receipt with:
+
+- package and Node-version matrix values
+- command names rendered from matrix templates
+- exit code, duration, stdout, and stderr for each job
+- summary totals for planned, passed, failed, timed-out, and skipped jobs
+
+See [the fixture command matrix tutorial](docs/tutorials/fixture-command-matrix.md) for the walkthrough.
+
+Promotion support drafts live in [docs/promo/video-brief.md](docs/promo/video-brief.md) and [docs/promo/social-hooks.md](docs/promo/social-hooks.md).
+
+## Safety model
+
+- local-only execution; no network or hosted service is required
+- execution requires the explicit `--execute` flag
+- receipts redact secret-looking environment keys and output snippets
+- failed jobs stop later jobs unless `continueOnFailure` is set
+
+## Maintained smoke
+
 Run the maintained smoke fixture to exercise the main workflow end to end:
 
 ```sh

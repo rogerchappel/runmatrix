@@ -1,6 +1,11 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+cd "$repo_root"
+
+bash demo/run-fixture-matrix.sh
+
 rm -rf .runmatrix-smoke .runmatrix-release-gate
 
 node dist/cli.js plan --config fixtures/smoke.yaml | grep -q "print-node-20"
