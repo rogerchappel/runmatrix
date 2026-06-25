@@ -1,0 +1,8 @@
+name: runmatrix-smoke
+outDir: ../.runmatrix-smoke
+axes:
+  node:
+    - 20
+commands:
+  - name: print-node-{{node}}
+    run: node -e "console.log('node={{node}}')"
