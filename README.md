@@ -37,6 +37,7 @@ Start with the built CLI help so the examples match the checked-out version:
 
 ```sh
 node dist/cli.js --help
+node dist/cli.js --version
 ```
 
 ## Demo recipe
