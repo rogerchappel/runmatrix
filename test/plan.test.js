@@ -57,9 +57,16 @@ test("formatPlan prints a deterministic human-readable preview", () => {
 test("cli help advertises safe preview before execution", async () => {
   const { stdout } = await execFileAsync("node", ["dist/cli.js", "--help"]);
 
+  assert.match(stdout, /runmatrix --version/);
   assert.match(stdout, /runmatrix plan/);
   assert.match(stdout, /runmatrix run --execute/);
   assert.match(stdout, /Expand jobs without executing commands/);
+});
+
+test("cli --version prints the package version", async () => {
+  const { stdout } = await execFileAsync("node", ["dist/cli.js", "--version"]);
+
+  assert.equal(stdout.trim(), "0.1.0");
 });
 
 test("cli refuses to run commands without --execute", async () => {

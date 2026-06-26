@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import process from "node:process";
 import { expandJobs, formatPlan, formatReceipt, loadConfig, runMatrix, showLatest } from "./index.js";
+import { VERSION } from "./version.js";
 
 type ParsedArgs = {
   command?: string;
@@ -13,6 +14,11 @@ type ParsedArgs = {
 
 async function main(argv: string[]): Promise<number> {
   const args = parseArgs(argv);
+
+  if (args.command === "--version" || args.command === "-v") {
+    process.stdout.write(`${VERSION}\n`);
+    return 0;
+  }
 
   if (args.help || !args.command) {
     process.stdout.write(helpText());
@@ -101,6 +107,7 @@ function helpText(): string {
 Local matrix runner for deterministic command receipts.
 
 Usage:
+  runmatrix --version
   runmatrix plan [--config runmatrix.yaml] [--json]
   runmatrix run --execute [--config runmatrix.yaml] [--out-dir .runmatrix] [--json]
   runmatrix show [--out-dir .runmatrix] [--json]
