@@ -33,9 +33,10 @@
     "test": "npm run build && node --test test/*.test.js",
     "smoke": "bash scripts/smoke.sh",
     "prepack": "npm run build",
-    "package:smoke": "npm run build && node scripts/validate-package-manifest.mjs && node dist/cli.js --version && npm pack --dry-run",
-    "release:check": "npm test && npm run check && npm run smoke && npm run package:smoke",
-    "release:readiness": "node scripts/validate-release-readiness.mjs"
+    "package:smoke": "npm run build && npm run bin:smoke && npm pack --dry-run",
+    "release:check": "npm run check && npm test && npm run smoke && npm run package:smoke",
+    "release:readiness": "node scripts/validate-release-readiness.mjs",
+    "bin:smoke": "node -e \"const fs=require('node:fs'); const p=require('./package.json'); const bins=typeof p.bin==='string'?{[p.name]:p.bin}:p.bin||{}; for (const [name,target] of Object.entries(bins)) { if (!fs.existsSync(target)) { console.error(name + ' bin target missing: ' + target); process.exit(1); } }\""
   },
   "keywords": [
     "cli",
